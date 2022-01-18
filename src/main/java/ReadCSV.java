@@ -15,23 +15,31 @@ public class ReadCSV<T, T2> implements ReadFile<SamplingCSV, CSVRecord> {
         Reader in = new FileReader(path);
         int num = 1;
         int start;
+
         List<ArrayList<SamplingCSV>> arrayListOfRecords = new ArrayList<>();
         List<SamplingCSV> samplingCSVArrayList = new ArrayList<>();
-        Iterable<CSVRecord> records = CSVFormat.RFC4180.parse(in);
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.parse(in);
         Iterator<CSVRecord> csvRecordIterator = records.iterator();
+
         while (csvRecordIterator.hasNext()) {
             samplingCSVArrayList.add(newItem(csvRecordIterator));
             if (samplingCSVArrayList.size() % 50000 == 0) {
                 if (num == 1) {
                     start = 0;
                 } else {
-                    start = (5000 * (num - 1)) - 1;
+                    start = (50000 * (num - 1)) - 1;
                 }
                 num++;
                 arrayListOfRecords.add(new ArrayList<SamplingCSV>(samplingCSVArrayList.subList(start, samplingCSVArrayList.size())));
             }
 
         }
+        if (num == 1) {
+            start = 0;
+        } else {
+            start = (20 * (num - 1)) - 1;
+        }
+        arrayListOfRecords.add(new ArrayList<SamplingCSV>(samplingCSVArrayList.subList(start, samplingCSVArrayList.size())));
         return arrayListOfRecords;
 
 
@@ -39,8 +47,8 @@ public class ReadCSV<T, T2> implements ReadFile<SamplingCSV, CSVRecord> {
 
     @Override
     public SamplingCSV newItem(Iterator<CSVRecord> csvRecordIterator) {
-        String madaCode=null, idNum=null, sIdType=null, firstName=null, lastName = null;
-        String city = null, barcode=null, street=null, buildingNumber=null, getDate=null, takeDate=null, resultDate=null;
+        String madaCode = null, idNum = null, sIdType = null, firstName = null, lastName = null;
+        String city = null, barcode = null, street = null, buildingNumber = null, getDate = null, takeDate = null, resultDate = null;
         madaCode = String.valueOf(csvRecordIterator.next().get(0));
         idNum = csvRecordIterator.next().get(1);
         sIdType = (csvRecordIterator.next().get(2));
