@@ -1,2 +1,6 @@
-package PACKAGE_NAME;public enum IdType {
+public enum IdType {
+    BlueID,
+    passport,
+    HMOMemberNumber
+
 }
